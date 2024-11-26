@@ -1,101 +1,131 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useEffect } from "react";
+import SlotMachine from "@/components/SlotMachine";
+import GenerateButton from "@/components/GenerateButton";
+import { sfPro } from "./fonts";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [isSpinning, setIsSpinning] = useState(false);
+  const [result, setResult] = useState<DateIdea | null>(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const handleGenerate = () => {
+    setIsSpinning(true);
+    setTimeout(() => {
+      setIsSpinning(false);
+      setResult({
+        dayTime: generateRandomDayTime(),
+        activity: generateRandomActivity(),
+        pricePoint: generateRandomPricePoint(),
+      });
+    }, 3000);
+  };
+
+  return (
+    <main
+      className={`min-h-screen p-8 flex flex-col items-center justify-center bg-[#1A1B23] relative overflow-hidden ${sfPro.variable} font-sans`}
+    >
+      {/* Decorative background elements */}
+      <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-5" />
+      <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#FF3333]/10 to-transparent" />
+
+      {/* Header with gaming style */}
+      <div className="relative">
+        <div className="absolute -top-12 -left-16 w-32 h-32 bg-[#FF3333] rounded-full blur-[100px] opacity-20" />
+        <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
+          <span className="text-[#FF3333] relative">
+            🎲
+            <span className="absolute -top-1 -right-1 w-2 h-2 bg-[#FF3333] rounded-full animate-ping" />
+          </span>
+          Date Idea Generator
+        </h1>
+        <p className="text-[#FF3333]/60 text-center mb-8">
+          Level up your dating game!
+        </p>
+      </div>
+
+      {/* Main card with enhanced styling */}
+      <div className="bg-[#232530] rounded-2xl p-8 shadow-2xl w-full max-w-md border border-[#2F3142] relative">
+        {/* Glowing corner accents */}
+        <div className="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-[#FF3333]/30 rounded-tl-2xl" />
+        <div className="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-[#FF3333]/30 rounded-br-2xl" />
+
+        <SlotMachine isSpinning={isSpinning} result={result} />
+
+        <div className="mt-8">
+          <GenerateButton
+            onClick={handleGenerate}
+            isSpinning={isSpinning}
+            isRegenerating={!!result}
+          />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+
+        {result && !isSpinning && (
+          <div className="mt-6 flex justify-center gap-4">
+            <button className="px-4 py-2 bg-[#2F3142] text-[#FF3333] rounded-lg hover:bg-[#383B52] transition-colors flex items-center gap-2">
+              <span className="w-2 h-2 bg-[#FF3333] rounded-full animate-pulse" />
+              Save
+            </button>
+            <button className="px-4 py-2 bg-[#2F3142] text-[#FF3333] rounded-lg hover:bg-[#383B52] transition-colors flex items-center gap-2">
+              <span className="w-2 h-2 bg-[#FF3333] rounded-full animate-pulse" />
+              Share
+            </button>
+          </div>
+        )}
+
+        {/* Bottom stats */}
+        <div className="mt-8 pt-4 border-t border-[#2F3142] flex justify-between text-xs text-[#FF3333]/60">
+          <span>v1.0.0</span>
+          <span>Made with ❤️ for couples</span>
+        </div>
+      </div>
+    </main>
   );
+}
+
+// Types
+interface DateIdea {
+  dayTime: string;
+  activity: string;
+  pricePoint: string;
+}
+
+// Helper functions
+function generateRandomDayTime(): string {
+  const days = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
+  const times = ["Morning", "Afternoon", "Evening", "Night"];
+  return `${days[Math.floor(Math.random() * days.length)]} ${
+    times[Math.floor(Math.random() * times.length)]
+  }`;
+}
+
+function generateRandomActivity(): string {
+  const activities = [
+    "Movie Night",
+    "Picnic in the Park",
+    "Cooking Class",
+    "Museum Visit",
+    "Beach Walk",
+    "Dance Lessons",
+    "Board Game Café",
+    "Art Gallery",
+    "Wine Tasting",
+    "Hiking Adventure",
+    "Concert",
+    "Food Truck Tour",
+  ];
+  return activities[Math.floor(Math.random() * activities.length)];
+}
+
+function generateRandomPricePoint(): string {
+  const pricePoints = ["$ Budget-Friendly", "$$ Moderate", "$$$ Splurge"];
+  return pricePoints[Math.floor(Math.random() * pricePoints.length)];
 }
